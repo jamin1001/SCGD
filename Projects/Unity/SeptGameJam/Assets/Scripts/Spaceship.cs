@@ -13,17 +13,11 @@ public class Spaceship : MonoBehaviour
   public string keyPress = "";
   public string logEntry = "";
 
-  // x ~ right ~ red
-  // y ~ up ~ green
-  // z ~ forward ~ blue
-
-
   float _camAspect;
   float _camTop;
   float _camBottom;
   float _camRight;
   float _camLeft;
-
 
   // Start is called before the first frame update
   void Start()
@@ -35,6 +29,120 @@ public class Spaceship : MonoBehaviour
     _camLeft = -_camRight;
   }
 
+  // Update is called once per frame
+  void Update()
+  {
+    logEntry = "";
+    keyPress = "";
+
+    //########################################
+    // {WASD} & {Arrows keys}
+    CheckWASD();  
+    CheckArrowsKey();
+
+    // Brake and Reset the ship ........................................
+    if (Input.GetKey(KeyCode.Space))
+    {
+      shipSpeed = 0;
+      shipVelocity = Vector3.zero;
+      transform.position = Vector3.zero;
+      transform.rotation = Quaternion.identity;
+    }
+    else if (Input.GetKey(KeyCode.Escape))
+    {
+      Application.Quit();
+    }
+
+    // transform.Translate(Vector3.zero);// works!
+    transform.Translate(shipVelocity * Time.deltaTime, Space.World);
+    // transform.Translate(Vector3.up * Time.deltaTime, Space.World);
+
+    CheckWarp(true);
+
+    // check on it!!!!!!
+    // Debug.DrawLine(new Vector3(-3, -4, 0), new Vector3(3, 4, 0), Color.red);
+
+    PrintDebugLog();
+
+    return;
+  }//Update.end
+
+  void CheckWASD(){
+    // Increment speed .................................................
+    if (Input.GetKey(KeyCode.W))
+    {
+      keyPress = "{W}:";
+      shipSpeed = shipAcc * Time.deltaTime;
+      shipVelocity += shipSpeed * transform.right;
+    }
+    // Decrease Speed ..................................................
+    else if (Input.GetKey(KeyCode.S))
+    {
+      keyPress = "{S}:";
+      shipSpeed = -shipAcc * Time.deltaTime;
+      shipVelocity += shipSpeed * transform.right;
+    }
+    // Rotate CW .......................................................
+    else if (Input.GetKey(KeyCode.D))
+    {
+      keyPress = "{D}:";
+      transform.Rotate(new Vector3(0, 0, -shipRotation * Time.deltaTime));
+    }
+    // Rotate CCW ......................................................
+    else if (Input.GetKey(KeyCode.A))
+    {
+      keyPress = "{A}:";
+      transform.Rotate(new Vector3(0, 0, shipRotation * Time.deltaTime));
+    }
+
+    return;
+  }//CheckWASD.end
+
+  void CheckArrowsKey()
+  {
+    if (Input.GetKey(KeyCode.UpArrow))
+    {
+      keyPress = "{Up-Arrow}:";
+      // shipSpeed += shipAcc*Time.deltaTime;
+      // shipSpeed = 0.01F*Time.deltaTime;
+      shipSpeed = shipAcc * Time.deltaTime;
+      shipVelocity += shipSpeed * transform.right;
+    }
+    else if (Input.GetKey(KeyCode.DownArrow))
+    {
+      keyPress = "{Down-Arrow}:";
+      // shipSpeed -= shipAcc*Time.deltaTime;
+      // shipSpeed = -0.01F*Time.deltaTime;
+      shipSpeed = -shipAcc * Time.deltaTime;
+      shipVelocity += shipSpeed * transform.right;
+    }
+    if (Input.GetKey(KeyCode.RightArrow))
+    {
+      keyPress = "{Right-Arrow}:";
+      transform.Rotate(new Vector3(0, 0, -shipRotation * Time.deltaTime));
+    }
+    else if (Input.GetKey(KeyCode.LeftArrow))
+    {
+      keyPress = "{Left-Arrow}:";
+      transform.Rotate(new Vector3(0, 0, shipRotation * Time.deltaTime));
+    }
+
+    return;    
+  }//CheckArrowsKey().end
+
+  void PrintDebugLog()
+  {
+    logEntry += keyPress;
+    // logEntry += ", " + transform.right;// changing
+    // logEntry += ", " + transform.right;// changing
+    // logEntry += ", " + transform.forward;// constant
+    // logEntry += ", " + shipSpeed*transform.right;
+    // logEntry += ", " + Time.realtimeSinceStartup;
+    logEntry += ", x = " + shipVelocity.x;
+    logEntry += ", y = " + shipVelocity.y;
+    Debug.Log(logEntry);
+    return;
+  }//PrintDebugLog.end
 
   bool IsWithinCam(Vector3 point, float epsilon)
   {
@@ -45,7 +153,7 @@ public class Spaceship : MonoBehaviour
         point.y > _camBottom - epsilon)
       return true;
 
-    return false;
+      return false;
   }
 
   bool WarpShip(float Px, float Py, float Vx, float Vy, float t)
@@ -118,115 +226,26 @@ public class Spaceship : MonoBehaviour
           return;
       }
     }
-
   }
 
-  // Update is called once per frame
-  void Update()
+  private void OnDrawGizmos()
   {
-    logEntry = "";
-    keyPress = "";
 
-    // 30-60 Hz --> 16? time a second
-    // depend on cumputer
-
-
-
-
-    //--------------------------------------Increment speed
-    if (Input.GetKey(KeyCode.W))
-    {
-      keyPress = "{W}:";
-      shipSpeed += shipAcc * Time.deltaTime;
-      shipVelocity += shipSpeed * transform.right;
-    }
-    //--------------------------------------Decrease Speed
-    else if (Input.GetKey(KeyCode.S))
-    {
-      keyPress = "{S}:";
-      shipSpeed -= shipAcc * Time.deltaTime;
-      shipVelocity += shipSpeed * transform.right;
-    }
-    //--------------------------------------Rotate CW
-    else if (Input.GetKey(KeyCode.D))
-    {
-      keyPress = "{D}:";
-      transform.Rotate(new Vector3(0, 0, -shipRotation * Time.deltaTime));
-    }
-    //--------------------------------------Rotate CCW
-    else if (Input.GetKey(KeyCode.A))
-    {
-      keyPress = "{A}:";
-      transform.Rotate(new Vector3(0, 0, shipRotation * Time.deltaTime));
-    }
-
-
-
-
-
-
-    else if (Input.GetKey(KeyCode.UpArrow))
-    {
-      keyPress = "{Up-Arrow}:";
-      // shipSpeed += shipAcc*Time.deltaTime;
-      // shipSpeed = 0.01F*Time.deltaTime;
-      shipSpeed = shipAcc * Time.deltaTime;
-      shipVelocity += shipSpeed * transform.right;
-    }
-    else if (Input.GetKey(KeyCode.DownArrow))
-    {
-      keyPress = "{Down-Arrow}:";
-      // shipSpeed -= shipAcc*Time.deltaTime;
-      // shipSpeed = -0.01F*Time.deltaTime;
-      shipSpeed = -shipAcc * Time.deltaTime;
-      shipVelocity += shipSpeed * transform.right;
-    }
-    if (Input.GetKey(KeyCode.RightArrow))
-    {
-      keyPress = "{Right-Arrow}:";
-      transform.Rotate(new Vector3(0, 0, -shipRotation * Time.deltaTime));
-    }
-    else if (Input.GetKey(KeyCode.LeftArrow))
-    {
-      keyPress = "{Left-Arrow}:";
-      transform.Rotate(new Vector3(0, 0, shipRotation * Time.deltaTime));
-    }
-
-
-
-    //--------------------------------------Brake and Reset
-    else if (Input.GetKey(KeyCode.Space))
-    {
-      shipSpeed = 0;
-      shipVelocity = Vector3.zero;
-      transform.position = Vector3.zero;
-      transform.rotation = Quaternion.identity;
-    }
-    else if (Input.GetKey(KeyCode.Escape))
-    {
-      Application.Quit();
-    }
-
-
-    // else {
-    // 
-    // }
-
-    // transform.Translate(Vector3.zero);// works!
-    transform.Translate(shipVelocity * Time.deltaTime, Space.World);
-    // transform.Translate(Vector3.up * Time.deltaTime, Space.World);
-
-    CheckWarp(true);
-
-    logEntry += keyPress;
-    // logEntry += ", " + transform.right;// changing
-    // logEntry += ", " + transform.right;// changing
-    // logEntry += ", " + transform.forward;// constant
-    // logEntry += ", " + shipSpeed*transform.right;
-    // logEntry += ", " + Time.realtimeSinceStartup;
-    logEntry += ", x = " + shipVelocity.x;
-    logEntry += ", y = " + shipVelocity.y;
-    Debug.Log(logEntry);
-
+    //Gizmos.color = Color.red;
+    //Gizmos.DrawLine(new Vector3(-3, -4, 0), new Vector3(3, 4, 0));
   }
+
 }
+
+/* Note:
+
+Update():
+--- 30-60 Hz --> 16? time a second
+--- depend on cumputer
+
+x ~ right ~ red
+y ~ up ~ green
+z ~ forward ~ blue
+
+*/
+
