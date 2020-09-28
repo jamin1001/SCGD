@@ -9,6 +9,11 @@ public class Spaceship : MonoBehaviour
   public float shipSpeed = 0;
   public float shipRotation = 100;
   public Vector3 shipVelocity = Vector3.zero;
+  public float dtheta = 0;
+  // public float rtheta = 0;
+  public float slope = 0;
+  public float x1=0, y1=0, x2=0, y2=0, x3=0, y3=0;
+  public Vector3 P1=Vector3.zero, P2=Vector3.zero, P3=Vector3.zero;
 
   public string keyPress = "";
   public string logEntry = "";
@@ -61,6 +66,27 @@ public class Spaceship : MonoBehaviour
 
     // check on it!!!!!!
     // Debug.DrawLine(new Vector3(-3, -4, 0), new Vector3(3, 4, 0), Color.red);
+
+    slope = shipVelocity.y/shipVelocity.x;
+    x1 = transform.position.x;
+    y1 = transform.position.y;
+      P1 = new Vector3(x1, y1, 0);
+    x2 = 10;// get programatically
+    y2 = slope*x2 + y1 - slope*x1;
+      P2 = new Vector3(x2, y2, 0);
+    x3 = -10;// get programatically
+    y3 = slope*x3 + y1 - slope*x1;
+      P3 = new Vector3(x3, y3, 0);
+    Debug.DrawLine(P1, P2, Color.blue);
+    Debug.DrawLine(P1, P3, Color.red);
+
+
+
+    // if (Mathf.Approximately(dtheta, 90)) 
+    // if (Mathf.Abs(dtheta - 90) < 0.00001) 
+    // {
+    //   slope = 999999;
+    // }
 
     PrintDebugLog();
 
@@ -138,8 +164,11 @@ public class Spaceship : MonoBehaviour
     // logEntry += ", " + transform.forward;// constant
     // logEntry += ", " + shipSpeed*transform.right;
     // logEntry += ", " + Time.realtimeSinceStartup;
-    logEntry += ", x = " + shipVelocity.x;
-    logEntry += ", y = " + shipVelocity.y;
+    logEntry += ", Vx = " + shipVelocity.x;
+    logEntry += ", Vy = " + shipVelocity.y;
+    slope = shipVelocity.x/shipVelocity.y;
+    logEntry += ", m = " + slope;
+    // logEntry += "(" + dtheta + " --> " + rtheta + " --> " + slope + ")";
     Debug.Log(logEntry);
     return;
   }//PrintDebugLog.end
