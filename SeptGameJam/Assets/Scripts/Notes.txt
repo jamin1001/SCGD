@@ -1,0 +1,19 @@
+Note:
+
+Update():
+--- 30-60 Hz --> 16? time a second
+--- depend on cumputer
+
+x ~ right ~ red
+y ~ up ~ green
+z ~ forward ~ blue
+
+@16:9: 
+  Inspector.SpaceBG.Transform.Scale.(X, Y):(2.846628, 2.566835, 1)
+
+Layouts:
+  1_ShadedGame 2_HierarchyProjectAudio 3_InspectorServices
+  1_ShadedGame 2_InspectorAudio 3_HierarchyProject
+  1_ShadedGame 2_InspectorHierarchyProjectAudio
+  1_ShadedGame_Wide 2_InspectorHierarchyProjectAudio
+

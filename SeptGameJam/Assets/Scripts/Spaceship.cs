@@ -266,15 +266,3 @@ public class Spaceship : MonoBehaviour
 
 }
 
-/* Note:
-
-Update():
---- 30-60 Hz --> 16? time a second
---- depend on cumputer
-
-x ~ right ~ red
-y ~ up ~ green
-z ~ forward ~ blue
-
-*/
-
