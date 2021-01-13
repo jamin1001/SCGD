@@ -11,9 +11,14 @@ public class Spaceship : MonoBehaviour
   public Vector3 shipVelocity = Vector3.zero;
   public float dtheta = 0;
   // public float rtheta = 0;
+
+  public float W_R = 0, W_L = 0, W_T = 0, W_B=0;
+  public float x_ship = 0, y_ship = 0;
+  public float x_right=0, y_right = 0, x_left = 0, y_left = 0;
+
   public float slope = 0;
-  public float x1=0, y1=0, x2=0, y2=0, x3=0, y3=0;
-  public Vector3 P1=Vector3.zero, P2=Vector3.zero, P3=Vector3.zero;
+
+  public Vector3 xy_ship=Vector3.zero, xy_exit=Vector3.zero, xy_entrance=Vector3.zero;
 
   public string keyPress = "";
   public string logEntry = "";
@@ -32,6 +37,12 @@ public class Spaceship : MonoBehaviour
     _camBottom = -_camTop;
     _camRight = _camAspect * _camTop;
     _camLeft = -_camRight;
+
+    // for point 10% outside of the view port
+    W_R = 1.2F * Camera.main.orthographicSize;
+    W_L = -W_R;
+    W_T = W_R * Camera.main.aspect;
+    W_B = -W_T;
   }
 
   // Update is called once per frame
@@ -58,40 +69,49 @@ public class Spaceship : MonoBehaviour
       Application.Quit();
     }
 
-    // transform.Translate(Vector3.zero);// works!
     transform.Translate(shipVelocity * Time.deltaTime, Space.World);
-    // transform.Translate(Vector3.up * Time.deltaTime, Space.World);
-
     CheckWarp(true);
 
-    // check on it!!!!!!
-    // Debug.DrawLine(new Vector3(-3, -4, 0), new Vector3(3, 4, 0), Color.red);
-
-    slope = shipVelocity.y/shipVelocity.x;
-    x1 = transform.position.x;
-    y1 = transform.position.y;
-      P1 = new Vector3(x1, y1, 0);
-    x2 = 10;// get programatically
-    y2 = slope*x2 + y1 - slope*x1;
-      P2 = new Vector3(x2, y2, 0);
-    x3 = -10;// get programatically
-    y3 = slope*x3 + y1 - slope*x1;
-      P3 = new Vector3(x3, y3, 0);
-    Debug.DrawLine(P1, P2, Color.blue);
-    Debug.DrawLine(P1, P3, Color.red);
-
-
-
-    // if (Mathf.Approximately(dtheta, 90)) 
-    // if (Mathf.Abs(dtheta - 90) < 0.00001) 
-    // {
-    //   slope = 999999;
-    // }
+    // warping detection
+    /*
+    x_ship = transform.position.x;
+    y_ship = transform.position.y;
+    xy_ship = new Vector3(x_ship, y_ship, 0);
+    if (x_ship >= W_R || x_ship <= W_L || y_ship >= W_T || y_ship <= W_B)
+    {
+      warpShip();
+      transform.position = xy_entrance;
+    }
+    */
 
     PrintDebugLog();
-
     return;
   }//Update.end
+
+  void warpShip()
+  {
+    slope = shipVelocity.y / shipVelocity.x;
+    Vector3 warpSwapper = new Vector3();
+
+    // point outside window in direction of motion
+    y_right = slope * W_R + y_ship - slope * x_ship;
+    xy_exit = new Vector3(W_R, y_right, 0);
+
+    // point outside window opposite to direction of motion
+    y_left = slope * W_L + y_ship - slope * x_ship;
+    xy_entrance = new Vector3(W_L, y_left, 0);
+
+    if (shipVelocity.x <= 0)
+    {
+      warpSwapper = xy_entrance;
+      xy_entrance = xy_exit;
+      xy_exit = warpSwapper;
+    }
+
+    Debug.DrawLine(xy_ship, xy_exit, Color.blue);// worp exit indicator
+    Debug.DrawLine(xy_ship, xy_entrance, Color.red);// worp entrance indicator
+
+  }
 
   void CheckWASD(){
     // Increment speed .................................................
@@ -155,23 +175,6 @@ public class Spaceship : MonoBehaviour
 
     return;    
   }//CheckArrowsKey().end
-
-  void PrintDebugLog()
-  {
-    logEntry += keyPress;
-    // logEntry += ", " + transform.right;// changing
-    // logEntry += ", " + transform.right;// changing
-    // logEntry += ", " + transform.forward;// constant
-    // logEntry += ", " + shipSpeed*transform.right;
-    // logEntry += ", " + Time.realtimeSinceStartup;
-    logEntry += ", Vx = " + shipVelocity.x;
-    logEntry += ", Vy = " + shipVelocity.y;
-    slope = shipVelocity.x/shipVelocity.y;
-    logEntry += ", m = " + slope;
-    // logEntry += "(" + dtheta + " --> " + rtheta + " --> " + slope + ")";
-    Debug.Log(logEntry);
-    return;
-  }//PrintDebugLog.end
 
   bool IsWithinCam(Vector3 point, float epsilon)
   {
@@ -257,12 +260,37 @@ public class Spaceship : MonoBehaviour
     }
   }
 
-  private void OnDrawGizmos()
+  void PrintDebugLog()
   {
+    logEntry += keyPress;
+    // logEntry += ", " + transform.right;// changing
+    // logEntry += ", " + transform.right;// changing
+    // logEntry += ", " + transform.forward;// constant
 
-    //Gizmos.color = Color.red;
-    //Gizmos.DrawLine(new Vector3(-3, -4, 0), new Vector3(3, 4, 0));
-  }
+    // logEntry += ", " + shipSpeed*transform.right;
+    // logEntry += ", " + Time.realtimeSinceStartup;
+
+    // logEntry += ", Vx = " + shipVelocity.x;
+    // logEntry += ", Vy = " + shipVelocity.y;
+
+    // slope = shipVelocity.x/shipVelocity.y;
+    // logEntry += ", m = " + slope;
+    // logEntry += "(" + dtheta + " --> " + rtheta + " --> " + slope + ")";
+
+    // logEntry += "Screen.width = " + Screen.width;
+    // logEntry += ", Screen.height = " + Screen.height;
+
+    logEntry += ", W_R = " + W_R;
+    logEntry += ", W_L = " + W_L;
+    logEntry += ", W_T = " + W_T;
+    logEntry += ", W_B = " + W_B;
+
+    logEntry += ", xy_exit = " + xy_exit;
+    logEntry += ", xy_entrance = " + xy_entrance;
+
+    Debug.Log(logEntry);
+    return;
+  }//PrintDebugLog.end
 
 }
 

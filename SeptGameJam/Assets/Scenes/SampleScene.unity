@@ -130,7 +130,7 @@ LightingSettings:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Settings.lighting
-  serializedVersion: 2
+  serializedVersion: 3
   m_GIWorkflowMode: 1
   m_EnableBakedLightmaps: 0
   m_EnableRealtimeLightmaps: 0
@@ -152,7 +152,7 @@ LightingSettings:
   m_MixedBakeMode: 2
   m_LightmapsBakeMode: 1
   m_FilterMode: 1
-  m_LightmapParameters: {fileID: 0}
+  m_LightmapParameters: {fileID: 15204, guid: 0000000000000000f000000000000000, type: 0}
   m_ExportTrainingData: 0
   m_TrainingDataDestination: TrainingData
   m_RealtimeResolution: 2
@@ -169,7 +169,7 @@ LightingSettings:
   m_PVREnvironmentReferencePointCount: 2048
   m_LightProbeSampleCountMultiplier: 4
   m_PVRBounces: 2
-  m_PVRRussianRouletteStartBounce: 2
+  m_PVRMinBounces: 1
   m_PVREnvironmentMIS: 0
   m_PVRFilteringMode: 2
   m_PVRDenoiserTypeDirect: 0
@@ -412,16 +412,20 @@ MonoBehaviour:
   shipRotation: 100
   shipVelocity: {x: 0, y: 0, z: 0}
   dtheta: 0
+  W_R: 0
+  W_L: 0
+  W_T: 0
+  W_B: 0
+  x_ship: 0
+  y_ship: 0
+  x_right: 0
+  y_right: 0
+  x_left: 0
+  y_left: 0
   slope: 0
-  x1: 0
-  y1: 0
-  x2: 0
-  y2: 0
-  x3: 0
-  y3: 0
-  P1: {x: 0, y: 0, z: 0}
-  P2: {x: 0, y: 0, z: 0}
-  P3: {x: 0, y: 0, z: 0}
+  xy_ship: {x: 0, y: 0, z: 0}
+  xy_exit: {x: 0, y: 0, z: 0}
+  xy_entrance: {x: 0, y: 0, z: 0}
   keyPress: 
   logEntry: 
 --- !u!1001 &1463200673
@@ -438,18 +442,43 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7601792097742542696, guid: 2cb3edda740f9154b9d703de0570e519,
         type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7601792097742542696, guid: 2cb3edda740f9154b9d703de0570e519,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7601792097742542696, guid: 2cb3edda740f9154b9d703de0570e519,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7601792097742542696, guid: 2cb3edda740f9154b9d703de0570e519,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7601792097742542696, guid: 2cb3edda740f9154b9d703de0570e519,
+        type: 3}
       propertyPath: m_LocalPosition.x
-      value: 4.53
+      value: 5.27
       objectReference: {fileID: 0}
     - target: {fileID: 7601792097742542696, guid: 2cb3edda740f9154b9d703de0570e519,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.65
+      value: 2.36
       objectReference: {fileID: 0}
     - target: {fileID: 7601792097742542696, guid: 2cb3edda740f9154b9d703de0570e519,
         type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7601792097742542696, guid: 2cb3edda740f9154b9d703de0570e519,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7601792097742542696, guid: 2cb3edda740f9154b9d703de0570e519,
         type: 3}
@@ -468,16 +497,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7601792097742542696, guid: 2cb3edda740f9154b9d703de0570e519,
         type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7601792097742542696, guid: 2cb3edda740f9154b9d703de0570e519,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 7601792097742542696, guid: 2cb3edda740f9154b9d703de0570e519,
-        type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
@@ -490,21 +509,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7601792097742542696, guid: 2cb3edda740f9154b9d703de0570e519,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7601792097742542696, guid: 2cb3edda740f9154b9d703de0570e519,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7601792097742542696, guid: 2cb3edda740f9154b9d703de0570e519,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2cb3edda740f9154b9d703de0570e519, type: 3}
