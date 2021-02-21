@@ -1,6 +1,3 @@
-//[+] flickering exaust interval MUST be cotroled by 
-//    time for platform consistency.
-
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,12 +5,12 @@ using UnityEngine;
 public class SpaceshipExaust : MonoBehaviour
 {
     int nframe = 0;
-    public int duration = 10;
+    int duration = 10;
 
     // Start is called before the first frame update
     void Start()
     {
-      return;        
+        
     }
 
     // Update is called once per frame
@@ -32,24 +29,3 @@ public class SpaceshipExaust : MonoBehaviour
       return;
     }
 }
-
-
-/*
-3-9-->7
------------|   |-----------|   |-----------|   |
-           |   |           |   |           |   |
-           |   |           |   |           |   |
-           |   |           |   |           |   |
-           |   |           |   |           |   |
-           |___|           |___|           |___|
-           10-2-->3
-
-*/
-
-
-
-
-
-
-
-

@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -29,6 +30,10 @@ public class Spaceship : MonoBehaviour
   float _camRight;
   float _camLeft;
 
+  public GameObject MissilePreFab;
+  GameObject ob;
+  Rigidbody2D missile;
+
   // Start is called before the first frame update
   void Start()
   {
@@ -55,19 +60,8 @@ public class Spaceship : MonoBehaviour
     // {WASD} & {Arrows keys}
     CheckWASD();  
     CheckArrowsKey();
-
-    // Brake and Reset the ship ........................................
-    if (Input.GetKey(KeyCode.Space))
-    {
-      shipSpeed = 0;
-      shipVelocity = Vector3.zero;
-      transform.position = Vector3.zero;
-      transform.rotation = Quaternion.identity;
-    }
-    else if (Input.GetKey(KeyCode.Escape))
-    {
-      Application.Quit();
-    }
+    shootMissile();
+    resetSpaceShip();
 
     transform.Translate(shipVelocity * Time.deltaTime, Space.World);
     CheckWarp(true);
@@ -176,6 +170,42 @@ public class Spaceship : MonoBehaviour
     return;    
   }//CheckArrowsKey().end
 
+  void shootMissile()
+  {
+    keyPress += ", Space: " + Input.GetKey(KeyCode.Space);
+    if (Input.GetKeyDown(KeyCode.Space))
+    {
+      try
+      {
+        ob = Instantiate(MissilePreFab, transform.position, transform.rotation);
+        missile = ob.GetComponent<Rigidbody2D>();
+        missile.AddForce(10 * transform.right, ForceMode2D.Impulse);
+      } catch (Exception ex)
+      {
+        ex = ex;
+      }
+    }
+    return;
+  }
+
+  void resetSpaceShip()
+  {
+    // Brake and Reset the ship ........................................
+    // keyPress += ", RCtrl: " + Input.GetKey(KeyCode.RightControl);
+    if (Input.GetKey(KeyCode.RightControl) && Input.GetKey(KeyCode.Space))
+    {
+      shipSpeed = 0;
+      shipVelocity = Vector3.zero;
+      transform.position = Vector3.zero;
+      transform.rotation = Quaternion.identity;
+    }
+    else if (Input.GetKey(KeyCode.Escape))
+    {
+      Application.Quit();
+    }
+    return;
+  }
+
   bool IsWithinCam(Vector3 point, float epsilon)
   {
     if (
@@ -280,13 +310,13 @@ public class Spaceship : MonoBehaviour
     // logEntry += "Screen.width = " + Screen.width;
     // logEntry += ", Screen.height = " + Screen.height;
 
-    logEntry += ", W_R = " + W_R;
-    logEntry += ", W_L = " + W_L;
-    logEntry += ", W_T = " + W_T;
-    logEntry += ", W_B = " + W_B;
+    // logEntry += ", W_R = " + W_R;
+    // logEntry += ", W_L = " + W_L;
+    // logEntry += ", W_T = " + W_T;
+    // logEntry += ", W_B = " + W_B;
 
-    logEntry += ", xy_exit = " + xy_exit;
-    logEntry += ", xy_entrance = " + xy_entrance;
+    // logEntry += ", xy_exit = " + xy_exit;
+    // logEntry += ", xy_entrance = " + xy_entrance;
 
     Debug.Log(logEntry);
     return;
