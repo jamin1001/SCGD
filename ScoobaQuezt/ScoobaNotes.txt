@@ -1,0 +1,24 @@
+man_diving - Animator [Controller=Base Controller, Avatar=_MainRigAvatar{_MainRig}], Character Controller, Nav Mesh Agent, People_Wander Script
+  Geometry
+    man_diving - Skinned Mesh Renderer [Mesh=man_diving{_MainRig}, Root Bone=Root_M (Transform), Materials(0=LOW-POLY-COLORS)]
+  Main
+    DeformationSystem
+      Root_M
+
+
+
+
+Base Controller
+  Idle_Texting.fbx - Idles
+  Death.fbx - Deaths
+  Waving.fbx - Idles
+  Punch_LeftHand.fbx - Attack
+  Running.fbx - Locomotion
+  Walk.fbx - Walk_Male
+  Punch_RightHand.fbx - Attack
+  Kick_LeftFoot.fbx - Attack
+
+
+TPose.fbx
+Common_Animation_Set.fbx
+
