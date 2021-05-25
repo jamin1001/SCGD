@@ -41,6 +41,16 @@ public class Diver : MonoBehaviour
     const float FULLY_DIVED = 90.0f;
     const float FULLY_ASCENDED = -90.0f; // need to flip guy upwards fully from swim face down position
 
+    private void OnTriggerEnter(Collider other)
+    {
+        Prize prize = other.gameObject.GetComponent<Prize>();
+        if (prize != null)
+            prize.CollectPrize();
+
+        //other.gameObject.SetActive(false);
+        //Destroy(other.gameObject);
+    }
+
     // Start is called before the first frame update
     void Start()
     {
